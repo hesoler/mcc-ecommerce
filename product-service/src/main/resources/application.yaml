@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: product-service
+  threads:
+    virtual:
+      enabled: true
+  mongodb:
+    database: "${MONGODB_DATABASE:product-db}"
+    host: "${MONGODB_HOST:localhost}"
+    port: "${MONGODB_PORT:27017}"
+    username: "${MONGODB_USERNAME:root}"
+    password: "${MONGODB_PASSWORD:password}"
+    authentication-database: "${MONGODB_AUTH_DB:admin}"
+
+server:
+  port: "${SERVER_PORT:8080}"
