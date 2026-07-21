@@ -11,6 +11,10 @@ spring:
     username: "${MONGODB_USERNAME:root}"
     password: "${MONGODB_PASSWORD:password}"
     authentication-database: "${MONGODB_AUTH_DB:admin}"
+  web:
+    error:
+      include-message: always
+      include-stacktrace: never
 
 server:
   port: "${SERVER_PORT:8080}"
