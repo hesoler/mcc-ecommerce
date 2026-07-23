@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO) {
-        Product product = productMapper.toProduct(productRequestDTO);
+        Product product = productMapper.toEntity(productRequestDTO);
         Product savedProduct = productRepository.save(product);
         log.info("Product {} saved", savedProduct.getName());
 
