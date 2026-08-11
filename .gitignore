@@ -33,3 +33,5 @@ build/
 .vscode/
 
 .env
+/.atl/.skill-registry.cache.json
+/.atl/skill-registry.md
