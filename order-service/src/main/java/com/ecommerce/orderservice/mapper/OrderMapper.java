@@ -1,0 +1,25 @@
+package com.ecommerce.orderservice.mapper;
+
+import com.ecommerce.orderservice.dto.OrderLineItemsRequest;
+import com.ecommerce.orderservice.dto.OrderLineItemsResponse;
+import com.ecommerce.orderservice.dto.OrderRequest;
+import com.ecommerce.orderservice.dto.OrderResponse;
+import com.ecommerce.orderservice.model.Order;
+import com.ecommerce.orderservice.model.OrderLineItems;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+
+@Mapper(componentModel = "spring")
+public interface OrderMapper {
+
+    Order toEntity(OrderRequest orderRequest);
+
+    OrderLineItems toOrderLineItemsEntity(OrderLineItemsRequest orderLineItemsRequest);
+
+    @Mapping(target = "orderId", source = "id")
+    OrderResponse toResponseDTO(Order order);
+
+    OrderLineItemsResponse toOrderLineItemsResponse(OrderLineItems orderLineItems);
+
+}
