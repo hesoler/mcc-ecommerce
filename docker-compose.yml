@@ -29,8 +29,8 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: admin
-      POSTGRES_ROOT_PASSWORD: admin
-      POSTGRES_DATABASE: order_db
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: order_db
     volumes:
       - order_data:/var/lib/postgresql/data  # <--- ¡Aquí salvamos los datos!
 
