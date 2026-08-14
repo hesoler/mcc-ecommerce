@@ -92,4 +92,18 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryRepository.deleteById(id);
     }
 
+    @Override
+    public void reduceStock(String sku, Integer quantity) {
+        Inventory inventory = inventoryRepository.findBySku(sku)
+                .orElseThrow(() -> new ResourceNotFoundException("Inventory", "sku", sku));
+
+        if (inventory.getQuantity() < quantity) {
+            throw new IllegalArgumentException("Insufficient stock for SKU: " + sku);
+        }
+
+        inventory.setQuantity(inventory.getQuantity() - quantity);
+        inventoryRepository.save(inventory);
+        log.info("Stock reduced for SKU: {}. New quantity: {}", sku, inventory.getQuantity());
+    }
+
 }
