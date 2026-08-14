@@ -10,6 +10,8 @@ import com.ecommerce.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final WebClient webClient;
 
     @Override
     @Transactional
@@ -28,6 +31,25 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("In placeOrder");
         Order order = orderMapper.toEntity(orderRequest);
+
+        for (var item : order.getOrderLineItemsList()) {
+
+            String sku = item.getSku();
+            Integer quantity = item.getQuantity();
+
+            // Check inventory service for stock availability
+            Boolean inStock = webClient.get()
+                    .uri("http://localhost:8082/api/v1/inventory/" + sku,
+                            uriBuilder -> uriBuilder.queryParam("quantity", quantity).build())
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .block();
+
+            if (!Boolean.TRUE.equals(inStock)) {
+                throw new IllegalArgumentException("Product with SKU " + sku + " is not in stock or insufficient quantity available.");
+            }
+        }
+
         order.setOrderNumber(UUID.randomUUID().toString());
         orderRepository.save(order);
         log.info("Order placed successfully with order number: {}", order.getOrderNumber());
