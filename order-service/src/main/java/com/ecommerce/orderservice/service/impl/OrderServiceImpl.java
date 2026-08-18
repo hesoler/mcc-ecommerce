@@ -7,11 +7,11 @@ import com.ecommerce.orderservice.mapper.OrderMapper;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.service.OrderService;
+import com.ecommerce.orderservice.service.client.InventoryClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    private final WebClient webClient;
+    private final InventoryClient inventoryClient;
 
     @Override
     @Transactional
@@ -39,12 +39,7 @@ public class OrderServiceImpl implements OrderService {
 
             try {
                 // Check inventory service for stock availability
-                Boolean inStock = webClient.put()
-                        .uri("http://localhost:8082/api/v1/inventory/reduce/" + sku,
-                                uriBuilder -> uriBuilder.queryParam("quantity", quantity).build())
-                        .retrieve()
-                        .bodyToMono(Boolean.class)
-                        .block();
+                inventoryClient.reduceStock(sku, quantity);
 
             } catch (Exception e) {
                 log.error("Error when reducing stock for SKU {}: {}", sku, e.getMessage());
