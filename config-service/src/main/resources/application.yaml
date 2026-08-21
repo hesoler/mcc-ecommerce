@@ -1,3 +1,14 @@
 spring:
   application:
     name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/hesoler/mcc-config-data.git
+          clone-on-start: true
+          default-label: master
+          username: ${GITHUB_USERNAME}
+          password: ${GITHUB_TOKEN}
+server:
+  port: 8888
