@@ -5,11 +5,10 @@ import com.ecommerce.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class TestDataLoader implements CommandLineRunner {
 
